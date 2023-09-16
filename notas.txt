@@ -1,1 +1,9 @@
 1- Imagens do mesmo dia devem ser usadas apenas em um dos sets. (treino ou teste)
+
+Horario
+x' = xcos(0) + ysin(0)
+y' = -xsin(0) + ycos(0)
+
+Anti-horario
+x' = xcos(0) - ysin(0)
+y' = xsin(0) + ycos(0)
