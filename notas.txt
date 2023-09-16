@@ -7,3 +7,16 @@ y' = -xsin(0) + ycos(0)
 Anti-horario
 x' = xcos(0) - ysin(0)
 y' = xsin(0) + ycos(0)
+
+O 0 é em radianos.
+
+Para calcular a nova posição de um ponto é necessário primeiramente subtrair a coordenada
+do anchor point do x e y da coordenada original, fazer a operação acima e somar no x' e y'
+a coordenada do anchor point.
+
+x = x - xc/2
+y = y - yc/2
+xr, yr = (x*math.cos(ar) + y*math.sin(ar), -x*math.sin(ar) + y*math.cos(ar))
+
+xr = int(xr + xc/2)
+yr = int(yr + yc/2)
