@@ -1,0 +1,1 @@
+1- Imagens do mesmo dia devem ser usadas apenas em um dos sets. (treino ou teste)
