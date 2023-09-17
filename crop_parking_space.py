@@ -25,7 +25,7 @@ def rotate_coord(coord, angle, pivo):
 # imagem eh rotacionada em angle graus.
 def crop_parking_space(img, x, y, w, h, angle):
     img_height, img_width = img.shape[:2]
-    if (abs(angle) >= 45):
+    if (angle <= -45):
         angle = 90 - abs(angle)
         aux = h
         h = w
