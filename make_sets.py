@@ -17,18 +17,19 @@ def crop_space_xml(space):
     return crop_parking_space(img, x, y, w, h, angle)
 
 
-arq_xml = '2012-09-12_07_34_01.xml'
-img_name = '2012-09-12_07_34_01'
+img_name = '2012-09-12_10_11_12'
 img = cv.imread(img_name + ".jpg")
 
-tree = et.parse(arq_xml)
+tree = et.parse(img_name + ".xml")
 root = tree.getroot()
 spaces = root.findall('space')
 
 for s in spaces:
-    space_rec = crop_space_xml(s)
     id_space = s.attrib['id']
+    space_rec = crop_space_xml(s)
     occupied = s.attrib['occupied']
     name = 'recs\\' + img_name + "#" + id_space + ".jpg"
-    print(id_space, space_rec.shape)
-    cv.imwrite(name, space_rec)
+    try:
+        cv.imwrite(name, space_rec)
+    except:
+        print('Nao foi possivel recortar a vaga', id_space)

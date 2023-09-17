@@ -34,7 +34,5 @@ def crop_parking_space(img, x, y, w, h, angle):
     xi, yi = rotate_coord((x, y), angle, (img_width/2, img_height/2))
     xi = round(xi - w / 2)
     yi = round(yi - h / 2)
-    print("imagem:", img_rot.shape)
-    print((yi, yi+h), (xi, xi+w))
     final_img = img_rot[yi:yi+h, xi:xi+w]
     return final_img
