@@ -20,3 +20,5 @@ xr, yr = (x*math.cos(ar) + y*math.sin(ar), -x*math.sin(ar) + y*math.cos(ar))
 
 xr = int(xr + xc/2)
 yr = int(yr + yc/2)
+
+Obs:: A rotação feita na imagem pelo OpenCV é no sentido Anti-horario!!!!
