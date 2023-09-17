@@ -1,5 +1,6 @@
 import cv2 as cv
 import os
+import re
 from crop_parking_space import crop_parking_space
 import xml.etree.ElementTree as et
 
@@ -14,7 +15,8 @@ def create_dirs():
         os.makedirs(occupied_path)
 
 
-def crop_space_xml(space):
+# Retorna um recorte em img de acordo com os dados em space.
+def crop_space_xml(space, img):
     info_space = space.find('rotatedRect')
     coord_info = info_space.find('center')
     size_info = info_space.find('size')
@@ -27,26 +29,54 @@ def crop_space_xml(space):
     return crop_parking_space(img, x, y, w, h, angle)
 
 
-img_name = '2012-09-12_10_11_12'
-img = cv.imread(img_name + ".jpg")
+# Recorta todas as imagens de vagas registradas e as salva separando entre
+# ocupada e vazia.
+def segment_img(img_name, path_dest):
+    img = cv.imread(img_name + ".jpg")
+    tree = et.parse(img_name + ".xml")
+    root = tree.getroot()
+    spaces = root.findall('space')
+    for s in spaces:
+        id_space = s.attrib['id']
+        space_rec = crop_space_xml(s, img)
+        occupied = s.attrib['occupied']
+        name = img_name + "#" + id_space + ".jpg"
+        if (occupied == '1'):
+            name = 'occupied/' + name
+        else:
+            name = 'empty/' + name
+        name = 'recs/' + name
+        try:
+            cv.imwrite(name, space_rec)
+        except:
+            print('Nao foi possivel recortar a vaga', id_space)
 
-tree = et.parse(img_name + ".xml")
-root = tree.getroot()
-spaces = root.findall('space')
 
-for s in spaces:
-    create_dirs()
-    id_space = s.attrib['id']
-    space_rec = crop_space_xml(s)
-    occupied = s.attrib['occupied']
-    name = img_name + "#" + id_space + ".jpg"
-    if (occupied == '1'):
-        name = 'occupied/' + name
-    else:
-        name = 'empty/' + name
-    name = 'recs/' + name
+def scans_files(path_files, segment_dir_path):
+    img_re = r'.*\.jpg$'
+    files = os.listdir(path_files)
+    # Pega somente os .jpg
+    imgs_jpg = [f for f in files if re.match(img_re, f)]
+    # Remove extencao.
+    imgs = [os.path.splitext(img)[0] for img in imgs_jpg]
 
-    try:
-        cv.imwrite(name, space_rec)
-    except:
-        print('Nao foi possivel recortar a vaga', id_space)
+
+def scans_dirs():
+    pkLot_path = 'PKlot/PKlot'
+    parkings = os.listdir(pkLot_path)
+    pkLot_path += '/'
+    for parking in parkings:
+        wheaters = os.listdir(pkLot_path + parking)
+        parking += '/'
+        for wheater in wheaters:
+            days = os.listdir(pkLot_path + parking + wheater)
+            wheater += '/'
+            for day in days:
+                day += '/'
+                segment_dir_path = 'PKLotSegmented/' + parking + wheater + day
+                path_files = pkLot_path + parking + wheater + day
+                scans_files(path_files, segment_dir_path)
+
+
+if __name__ == '__main__':
+    scans_dirs()
