@@ -31,21 +31,25 @@ def crop_space_xml(space, img):
 
 # Recorta todas as imagens de vagas registradas e as salva separando entre
 # ocupada e vazia.
-def segment_img(img_name, path_dest):
-    img = cv.imread(img_name + ".jpg")
-    tree = et.parse(img_name + ".xml")
+def segment_img(img_path, img_name, path_dest):
+    img = cv.imread(img_path + img_name + ".jpg")
+    tree = et.parse(img_path + img_name + ".xml")
     root = tree.getroot()
     spaces = root.findall('space')
     for s in spaces:
-        id_space = s.attrib['id']
-        space_rec = crop_space_xml(s, img)
-        occupied = s.attrib['occupied']
-        name = img_name + "#" + id_space + ".jpg"
+        try:
+            id_space = s.attrib['id']
+            space_rec = crop_space_xml(s, img)
+            occupied = s.attrib['occupied']
+            name = img_name + "#" + id_space + ".jpg"
+        except:
+            print('Vaga id:', id_space, 'da imagem', img_name, 'faltando informacoes.')
+            continue
         if (occupied == '1'):
             name = 'occupied/' + name
         else:
             name = 'empty/' + name
-        name = 'recs/' + name
+        name = path_dest + name
         try:
             cv.imwrite(name, space_rec)
         except:
@@ -53,16 +57,28 @@ def segment_img(img_name, path_dest):
 
 
 def scans_files(path_files, segment_dir_path):
+    if not os.path.exists(segment_dir_path):
+        os.makedirs(segment_dir_path)
+        os.makedirs(segment_dir_path + 'empty')
+        os.makedirs(segment_dir_path + 'occupied')
+
     img_re = r'.*\.jpg$'
     files = os.listdir(path_files)
     # Pega somente os .jpg
     imgs_jpg = [f for f in files if re.match(img_re, f)]
     # Remove extencao.
     imgs = [os.path.splitext(img)[0] for img in imgs_jpg]
+    segment_img(path_files, imgs[0], segment_dir_path)
 
 
 def scans_dirs():
-    pkLot_path = 'PKlot/PKlot'
+    if not os.path.exists('PKLot'):
+        print("PKLot nao encontrada.")
+        exit(1)
+    pkLot_path = 'PKLot'
+    if os.path.exists('PKLot/PKLot'):
+        pkLot_path += '/PKLot'
+
     parkings = os.listdir(pkLot_path)
     pkLot_path += '/'
     for parking in parkings:
