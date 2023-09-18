@@ -37,6 +37,7 @@ def segment_img(img_path, img_name, path_dest):
     root = tree.getroot()
     spaces = root.findall('space')
     for s in spaces:
+        id_space = -1
         try:
             id_space = s.attrib['id']
             space_rec = crop_space_xml(s, img)
