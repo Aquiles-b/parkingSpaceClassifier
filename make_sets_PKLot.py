@@ -72,7 +72,7 @@ def scans_files(path_files, segment_dir_path):
     segment_img(path_files, imgs[0], segment_dir_path)
 
 
-def scans_dirs():
+def scans_dirs_PKLot():
     if not os.path.exists('PKLot'):
         print("PKLot nao encontrada.")
         exit(1)
@@ -96,4 +96,4 @@ def scans_dirs():
 
 
 if __name__ == '__main__':
-    scans_dirs()
+    scans_dirs_PKLot()
