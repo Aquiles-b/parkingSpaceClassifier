@@ -55,9 +55,12 @@ def create_csv_segmented_imgs(csv_name, imgs_path):
 
 
 if __name__ == '__main__':
-    imgs_path = os.path.join('PKLotSegmented', 'treino')
-    if not os.path.exists(imgs_path):
-        print('Erro: Caminho dos dados para treino nao encontrado.')
+    imgs_path_training = os.path.join('PKLotSegmented', 'treino')
+    imgs_path_test = os.path.join('PKLotSegmented', 'teste')
+    if not os.path.exists(imgs_path_training) or not os.path.exists(imgs_path_test):
+        print('Erro: Caminho dos dados nao encontrado.')
         exit(1)
-    csv_name = 'featuresVector.csv'
-    create_csv_segmented_imgs(csv_name, imgs_path)
+    csv_name_training = 'training_featuresVector.csv'
+    csv_name_test = 'test_featuresVector.csv'
+    create_csv_segmented_imgs(csv_name_training, imgs_path_training)
+    create_csv_segmented_imgs(csv_name_test, imgs_path_test)

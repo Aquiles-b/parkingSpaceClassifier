@@ -3,4 +3,5 @@ PKLot
 __pycache__
 recs
 PKLotSegmented
-featuresVector.csv
+training_featuresVector.csv
+test_featuresVector.csv
