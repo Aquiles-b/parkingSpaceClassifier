@@ -1,3 +1,4 @@
+from sys import path
 import cv2 as cv
 import os
 import re
@@ -32,8 +33,8 @@ def crop_space_xml(space, img):
 # Recorta todas as imagens de vagas registradas e as salva separando entre
 # ocupada e vazia.
 def segment_img(img_path, img_name, path_dest):
-    img = cv.imread(img_path + img_name + ".jpg")
-    tree = et.parse(img_path + img_name + ".xml")
+    img = cv.imread(os.path.join(img_path, img_name + ".jpg"))
+    tree = et.parse(os.path.join(img_path, img_name + ".xml"))
     root = tree.getroot()
     spaces = root.findall('space')
     for s in spaces:
@@ -47,10 +48,10 @@ def segment_img(img_path, img_name, path_dest):
             print('Vaga id:', id_space, 'da imagem', img_name, 'faltando informacoes.')
             continue
         if (occupied == '1'):
-            name = 'occupied/' + name
+            dir = 'occupied'
         else:
-            name = 'empty/' + name
-        name = path_dest + name
+            dir = 'empty'
+        name = os.path.join(path_dest, dir, name)
         try:
             cv.imwrite(name, space_rec)
         except:
@@ -60,8 +61,8 @@ def segment_img(img_path, img_name, path_dest):
 def scans_files(path_files, segment_dir_path):
     if not os.path.exists(segment_dir_path):
         os.makedirs(segment_dir_path)
-        os.makedirs(segment_dir_path + 'empty')
-        os.makedirs(segment_dir_path + 'occupied')
+        os.makedirs(os.path.join(segment_dir_path, 'empty'))
+        os.makedirs(os.path.join(segment_dir_path, 'occupied'))
 
     img_re = r'.*\.jpg$'
     files = os.listdir(path_files)
@@ -69,6 +70,7 @@ def scans_files(path_files, segment_dir_path):
     imgs_jpg = [f for f in files if re.match(img_re, f)]
     # Remove extencao.
     imgs = [os.path.splitext(img)[0] for img in imgs_jpg]
+    # for img in imgs:
     segment_img(path_files, imgs[0], segment_dir_path)
 
 
@@ -77,21 +79,18 @@ def scans_dirs_PKLot():
         print("PKLot nao encontrada.")
         exit(1)
     pkLot_path = 'PKLot'
-    if os.path.exists('PKLot/PKLot'):
-        pkLot_path += '/PKLot'
+    aux = os.path.join(pkLot_path, 'PKLot')
+    if os.path.exists(aux):
+        pkLot_path = aux
 
     parkings = os.listdir(pkLot_path)
-    pkLot_path += '/'
     for parking in parkings:
-        wheaters = os.listdir(pkLot_path + parking)
-        parking += '/'
+        wheaters = os.listdir(os.path.join(pkLot_path, parking))
         for wheater in wheaters:
-            days = os.listdir(pkLot_path + parking + wheater)
-            wheater += '/'
+            days = os.listdir(os.path.join(pkLot_path, parking, wheater))
             for day in days:
-                day += '/'
-                segment_dir_path = 'PKLotSegmented/' + parking + wheater + day
-                path_files = pkLot_path + parking + wheater + day
+                segment_dir_path = os.path.join('PKLotSegmented', parking, wheater, day)
+                path_files = os.path.join(pkLot_path, parking, wheater, day)
                 scans_files(path_files, segment_dir_path)
 
 
