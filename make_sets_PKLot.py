@@ -31,8 +31,8 @@ def crop_space_xml(space, img):
 # Recorta todas as imagens de vagas registradas e as salva separando entre
 # ocupada e vazia.
 def segment_img(img_path, img_name, path_dest):
-    img = cv.imread(os.path.join(img_path, img_name + ".jpg"))
-    tree = et.parse(os.path.join(img_path, img_name + ".xml"))
+    img = cv.imread(os.path.join(img_path, img_name + '.jpg'))
+    tree = et.parse(os.path.join(img_path, img_name + '.xml'))
     root = tree.getroot()
     spaces = root.findall('space')
     for s in spaces:
@@ -43,7 +43,8 @@ def segment_img(img_path, img_name, path_dest):
             occupied = s.attrib['occupied']
             name = img_name + "#" + id_space + ".jpg"
         except:
-            print('Vaga id:', id_space, 'da imagem', img_name, 'faltando informacoes.')
+            print('Falta de info no id:', id_space, 'do xml:')
+            print(os.path.join(img_path, img_name + '.xml'))
             continue
         if (occupied == '1'):
             dir = 'occupied'
