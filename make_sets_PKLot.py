@@ -1,10 +1,8 @@
-from sys import path
 import cv2 as cv
 import os
 import re
 from crop_parking_space import crop_parking_space
 import xml.etree.ElementTree as et
-
 
 # Cria os diretorios necessarios para os recortes.
 def create_dirs():
@@ -74,7 +72,7 @@ def scans_files(path_files, segment_dir_path):
     segment_img(path_files, imgs[0], segment_dir_path)
 
 
-def scans_dirs_PKLot():
+def search_PKLot_dir():
     if not os.path.exists('PKLot'):
         print("PKLot nao encontrada.")
         exit(1)
@@ -83,15 +81,25 @@ def scans_dirs_PKLot():
     if os.path.exists(aux):
         pkLot_path = aux
 
+    return pkLot_path
+
+
+def scans_dirs_PKLot():
+    pkLot_path = search_PKLot_dir()
     parkings = os.listdir(pkLot_path)
     for parking in parkings:
         wheaters = os.listdir(os.path.join(pkLot_path, parking))
         for wheater in wheaters:
             days = os.listdir(os.path.join(pkLot_path, parking, wheater))
+            isForTraining = True
             for day in days:
-                segment_dir_path = os.path.join('PKLotSegmented', parking, wheater, day)
+                if isForTraining:
+                    segment_dir_path = os.path.join('PKLotSegmented', 'treino', parking, wheater, day)
+                else:
+                    segment_dir_path = os.path.join('PKLotSegmented', 'teste', parking, wheater, day)
                 path_files = os.path.join(pkLot_path, parking, wheater, day)
                 scans_files(path_files, segment_dir_path)
+                isForTraining = not isForTraining
 
 
 if __name__ == '__main__':

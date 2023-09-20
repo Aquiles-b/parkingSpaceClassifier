@@ -22,3 +22,5 @@ xr = int(xr + xc/2)
 yr = int(yr + yc/2)
 
 Obs:: A rotação feita na imagem pelo OpenCV é no sentido Anti-horario!!!!
+
+Obs2:: O make_sets_PKLot.py tá limitado na linha 73 porque meu computador não aguenta.

@@ -1,7 +1,6 @@
 import cv2 as cv
 import math
 
-
 # Retorna @img rotacionado em @angle graus com o pivo no meio.
 def rotate_img(img, angle):
     height, width = img.shape[:2]
