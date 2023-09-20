@@ -18,8 +18,11 @@ def create_list_csv(csv_name):
 training_list = create_list_csv('training_featuresVector.csv')
 test_list = create_list_csv('test_featuresVector.csv')
 
+#indice de testes
+ind_test = 75
+
 # No calculo das distancia precisa do slicing :-1 para remover o label no final.
-distances = [euclidean_distance(test_list[0][:-1], hist[:-1]) for hist in training_list]
+distances = [euclidean_distance(test_list[ind_test][:-1], hist[:-1]) for hist in training_list]
 
 # Pega o indice dos 3 mais proximos.
 knn_indexs = np.argsort(distances)[:3]
@@ -27,9 +30,6 @@ knn_indexs = np.argsort(distances)[:3]
 best_of_three = (training_list[knn_indexs[0]][-1], training_list[knn_indexs[1]][-1], training_list[knn_indexs[2]][-1])
 majority = sum(best_of_three)
 
-if majority >= 2:
-    print('Ocupada')
-else:
-    print('Vazia')
-
 print(best_of_three)
+print('Resultado modelo:', 'Ocupada' if majority >= 2 else 'Vazia')
+print('Resultado real:', 'Ocupada' if test_list[ind_test][-1] == 1 else 'Vazia')
