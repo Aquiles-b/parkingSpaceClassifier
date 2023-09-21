@@ -4,6 +4,16 @@ from skimage import feature
 import csv
 import os
 
+# NAO TERMINADO!!!
+def normalize_hist(hist):
+    hist = list(hist)
+    max, min = np.argsort(hist)[-1], np.argsort(hist)[0]
+    div = max - min
+    for f, i in enumerate(hist):
+        hist[i] = (f - min) / div
+    
+    return hist
+
 # Retorna um historama vindo de um processamento LBP da imagem passada.
 def make_histogram(img, label_space):
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -21,20 +31,14 @@ def write_histograms(csv_name, hist_list):
         writer.writerows(hist_list)
 
 
-# Escreve em um csv o vetor de caracteristicas de todas as imagens 
-# (indo de 16 em 16) dentro do diretorio imgs_dir.
+# Escreve em um csv o vetor de caracteristicas de cada imagem em @imgs_dir
+# dentro do diretorio imgs_dir.
 def register_imgs_histogram_csv(csv_name, imgs_dir, label_space):
     imgs = os.listdir(imgs_dir)
     hist_list = list()
-    counter = 0
     for img in imgs:
         img = cv.imread(os.path.join(imgs_dir, img))
         hist_list.append(make_histogram(img, label_space))
-        counter += 1
-        if (counter == 16):
-            counter = 0
-            write_histograms(csv_name, hist_list)
-            hist_list.clear()
     write_histograms(csv_name, hist_list)
 
 
