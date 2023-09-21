@@ -4,7 +4,7 @@ from skimage import feature
 import csv
 import os
 
-# Retorna um historama da imagem passada.
+# Retorna um historama vindo de um processamento LBP da imagem passada.
 def make_histogram(img, label_space):
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     lbp = feature.local_binary_pattern(img_gray, 8, 3, method='default')
@@ -62,5 +62,7 @@ if __name__ == '__main__':
         exit(1)
     csv_name_training = 'training_featuresVector.csv'
     csv_name_test = 'test_featuresVector.csv'
+    # Cria csv do treino.
     create_csv_segmented_imgs(csv_name_training, imgs_path_training)
+    # Cria csv do teste.
     create_csv_segmented_imgs(csv_name_test, imgs_path_test)

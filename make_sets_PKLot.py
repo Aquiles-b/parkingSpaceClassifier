@@ -36,7 +36,7 @@ def crop_space_xml(space, img):
 
 
 # Recorta todas as imagens de vagas registradas e as salva separando entre
-# ocupada e vazia.
+# ocupada e vazia dentro do diretorio @path_dest.
 def segment_img(img_path, img_name, path_dest):
     img = cv.imread(os.path.join(img_path, img_name + '.jpg'))
     tree = et.parse(os.path.join(img_path, img_name + '.xml'))
@@ -63,7 +63,9 @@ def segment_img(img_path, img_name, path_dest):
             register_on_log('Nao foi possivel recortar a vaga {id_space}')
 
 
-def scans_files(path_files, segment_dir_path):
+# Itera por todas as imagens do diretorio @path_files, fazendo a segmentacao 
+# de cada uma e salvando no @segment_dir_path.
+def segment_all_imgs_dir(path_files, segment_dir_path):
     if not os.path.exists(segment_dir_path):
         os.makedirs(segment_dir_path)
         os.makedirs(os.path.join(segment_dir_path, 'empty'))
@@ -92,7 +94,8 @@ def search_PKLot_dir():
     return pkLot_path
 
 
-def scans_dirs_PKLot():
+# Escaneia todos os diretorios e monta o sets de treino e teste.
+def make_sets_PKLot():
     pkLot_path = search_PKLot_dir()
     parkings = os.listdir(pkLot_path)
     for parking in parkings:
@@ -106,9 +109,9 @@ def scans_dirs_PKLot():
                 else:
                     segment_dir_path = os.path.join('PKLotSegmented', 'teste', parking, wheater, day)
                 path_files = os.path.join(pkLot_path, parking, wheater, day)
-                scans_files(path_files, segment_dir_path)
+                segment_all_imgs_dir(path_files, segment_dir_path)
                 isForTraining = not isForTraining
 
 
 if __name__ == '__main__':
-    scans_dirs_PKLot()
+    make_sets_PKLot()
