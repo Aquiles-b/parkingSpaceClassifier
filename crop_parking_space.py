@@ -1,37 +1,40 @@
 import cv2 as cv
-import math
 
-# Retorna @img rotacionado em @angle graus com o pivo no meio.
+
+# Retorna @img rotacionado em @angle graus em relacao ao meio da imagem.
 def rotate_img(img, angle):
     height, width = img.shape[:2]
     mtx_rot = cv.getRotationMatrix2D((width/2, height/2), angle, 1)
     return cv.warpAffine(img, mtx_rot, (width, height))
 
 
-# Retorna a coordenada @coord rotacionada em @angle graus ao redor do @pivo no
-# sentido horario.
-def rotate_coord(coord, angle, pivo):
-    ar = math.radians(angle)
-    x = coord[0] - pivo[0]
-    y = coord[1] - pivo[1]
-    xr, yr = (x*math.cos(ar)+y*math.sin(ar), -x*math.sin(ar)+y*math.cos(ar))
-    xr = xr + pivo[0]
-    yr = yr + pivo[1]
-    return xr, yr
+# Retorna um recorte com a coordenada (x, y) no centro.
+def get_img_rec(img, x, y, w, h):
+    limits = img.shape[:2]
+    wi = x - w
+    hi = y - h
+    wf = x + w
+    hf = y + h
+    xi = wi if wi >= 0 else 0
+    yi = hi if hi >= 0 else 0
+    xf = wf if wf <= limits[1] else limits[1]
+    yf = hf if hf <= limits[0] else limits[0]
+
+    return img[yi:yf, xi:xf]
 
 
 # Retorna a vaga do estacionamento no ponto (x, y) com largura w e altura h, a
 # imagem eh rotacionada em angle graus.
 def crop_parking_space(img, x, y, w, h, angle):
-    img_height, img_width = img.shape[:2]
-    if (angle <= -45):
+    if angle <= -45:
         angle = 90 - abs(angle)
-        aux = h
-        h = w
-        w = aux
-    img_rot = rotate_img(img, angle)
-    xi, yi = rotate_coord((x, y), angle, (img_width/2, img_height/2))
-    xi = round(xi - w / 2)
-    yi = round(yi - h / 2)
+        aux = w
+        w = h
+        h = aux
+    img_rec = get_img_rec(img, x, y, w, h)
+    img_rot = rotate_img(img_rec, angle)
+    y, x = img_rot.shape[:2]
+    yi = round(y / 2 - h / 2)
+    xi = round(x / 2 - w / 2)
     final_img = img_rot[yi:yi+h, xi:xi+w]
     return final_img

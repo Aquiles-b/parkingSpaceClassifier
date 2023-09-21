@@ -4,6 +4,13 @@ import re
 from crop_parking_space import crop_parking_space
 import xml.etree.ElementTree as et
 
+
+# Escreve o @text no final do arquivo de log.
+def register_on_log(text):
+    with open('make_sets_PKLot.log', 'a', newline='') as log:
+        log.write(text)
+
+
 # Cria os diretorios necessarios para os recortes.
 def create_dirs():
     empty_path = 'recs/empty'
@@ -42,9 +49,8 @@ def segment_img(img_path, img_name, path_dest):
             space_rec = crop_space_xml(s, img)
             occupied = s.attrib['occupied']
             name = img_name + "#" + id_space + ".jpg"
-        except:
-            print('Falta de info no id:', id_space, 'do xml:')
-            print(os.path.join(img_path, img_name + '.xml'))
+        except Exception:
+            register_on_log(f'Falta de info no id: {id_space} do xml: {os.path.join(img_path, img_name + ".xml")}')
             continue
         if (occupied == '1'):
             dir = 'occupied'
@@ -53,8 +59,8 @@ def segment_img(img_path, img_name, path_dest):
         name = os.path.join(path_dest, dir, name)
         try:
             cv.imwrite(name, space_rec)
-        except:
-            print('Nao foi possivel recortar a vaga', id_space)
+        except Exception:
+            register_on_log('Nao foi possivel recortar a vaga {id_space}')
 
 
 def scans_files(path_files, segment_dir_path):
@@ -69,8 +75,9 @@ def scans_files(path_files, segment_dir_path):
     imgs_jpg = [f for f in files if re.match(img_re, f)]
     # Remove extencao.
     imgs = [os.path.splitext(img)[0] for img in imgs_jpg]
-    # for img in imgs:
-    segment_img(path_files, imgs[0], segment_dir_path)
+    # Segmenta todas as imagens em @imgs
+    for img in imgs:
+        segment_img(path_files, img, segment_dir_path)
 
 
 def search_PKLot_dir():
