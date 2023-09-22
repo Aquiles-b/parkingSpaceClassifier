@@ -4,6 +4,7 @@ from skimage import feature
 import csv
 import os
 
+
 # Normaliza o histograma usando o metodo min-max.
 def normalize_hist(hist):
     hist = list(hist)
@@ -15,7 +16,8 @@ def normalize_hist(hist):
         hist[idx] = (num_field - min) / div
     return hist
 
-# Retorna um historama vindo de um processamento LBP da imagem passada.
+
+# Retorna um historama normalizado vindo de um processamento LBP da imagem passada.
 def make_histogram(img, label_space):
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     lbp = feature.local_binary_pattern(img_gray, 8, 3, method='default')
@@ -45,7 +47,7 @@ def register_imgs_histogram_csv(csv_name, imgs_dir, label_space):
 
 
 # Cria um csv de histogramas para cada estacionamento em imgs_path com delimitador ;
-def create_csv_segmented_imgs(csv_name, imgs_path):
+def create_parkings_csvs(csv_name, imgs_path):
     for parking in os.listdir(imgs_path):
         csv_name_parking = f"{csv_name}{parking}.csv"
         for wheater in os.listdir(os.path.join(imgs_path, parking)):
@@ -61,7 +63,10 @@ def create_csv_segmented_imgs(csv_name, imgs_path):
                         register_imgs_histogram_csv(csv_name_parking, imgs_dir, label_space)
 
 
-if __name__ == '__main__':
+# Constroi csv's de vetores de caracteristicas normalizados (vindos de um processamento
+# LBP) com base nas imagens em PKLotSegmented. Para cada estacionamento, 
+# eh separado um csv's de treino e um de teste.
+def construct_csvs_LBP():
     imgs_path_training = os.path.join('PKLotSegmented', 'treino')
     imgs_path_test = os.path.join('PKLotSegmented', 'teste')
     if not os.path.exists(imgs_path_training) or not os.path.exists(imgs_path_test):
@@ -69,7 +74,11 @@ if __name__ == '__main__':
         exit(1)
     path_dir_csv = 'parkings_NFV_csv'
     os.makedirs(path_dir_csv)
-    # Cria csv do treino. (NFV = Normalized Features Vector)
-    create_csv_segmented_imgs(os.path.join(path_dir_csv, 'training_NFV_'), imgs_path_training)
-    # Cria csv do teste.
-    create_csv_segmented_imgs(os.path.join(path_dir_csv, 'test_NFV_'), imgs_path_test)
+    # Cria csv's de treino. (NFV = Normalized Features Vector)
+    create_parkings_csvs(os.path.join(path_dir_csv, 'training_NFV_'), imgs_path_training)
+    # Cria csv's de teste.
+    create_parkings_csvs(os.path.join(path_dir_csv, 'test_NFV_'), imgs_path_test)
+
+
+if __name__ == '__main__':
+    construct_csvs_LBP()
