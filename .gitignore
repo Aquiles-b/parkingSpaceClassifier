@@ -7,3 +7,4 @@ training_featuresVector.csv
 test_featuresVector.csv
 PKLot.tar.gz
 parkings_NFV_csv
+make_sets_PKLot.log
