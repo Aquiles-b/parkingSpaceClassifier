@@ -39,28 +39,34 @@ def crop_space_xml(space, img):
 # ocupada e vazia dentro do diretorio @path_dest.
 def segment_img(img_path, img_name, path_dest):
     img = cv.imread(os.path.join(img_path, img_name + '.jpg'))
-    tree = et.parse(os.path.join(img_path, img_name + '.xml'))
-    root = tree.getroot()
-    spaces = root.findall('space')
+    try:
+        tree = et.parse(os.path.join(img_path, img_name + '.xml'))
+        root = tree.getroot()
+        spaces = root.findall('space')
+    except Exception:
+        register_on_log(f'Erro 1: Nao foi encontrado o xml: {os.path.join(img_path, img_name + ".xml")}\n')
+        return
     for s in spaces:
         id_space = -1
         try:
             id_space = s.attrib['id']
-            space_rec = crop_space_xml(s, img)
             occupied = s.attrib['occupied']
             name = img_name + "#" + id_space + ".jpg"
+            if (occupied == '1'):
+                dir = 'occupied'
+            else:
+                dir = 'empty'
+            name = os.path.join(path_dest, dir, name)
+            if (os.path.exists(name)):
+                continue
+            space_rec = crop_space_xml(s, img)
         except Exception:
-            register_on_log(f'Falta de info no id: {id_space} do xml: {os.path.join(img_path, img_name + ".xml")}')
+            register_on_log(f'Erro 2: Falta de info no id: {id_space} do xml: {os.path.join(img_path, img_name + ".xml")}\n')
             continue
-        if (occupied == '1'):
-            dir = 'occupied'
-        else:
-            dir = 'empty'
-        name = os.path.join(path_dest, dir, name)
         try:
             cv.imwrite(name, space_rec)
         except Exception:
-            register_on_log('Nao foi possivel recortar a vaga {id_space}')
+            register_on_log('Erro 3: Nao foi possivel recortar a vaga {id_space}\n')
 
 
 # Itera por todas as imagens do diretorio @path_files, fazendo a segmentacao 
