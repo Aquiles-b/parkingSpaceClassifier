@@ -90,12 +90,12 @@ def KNN_test_combination(test_name, training_name):
 
 
 # Faz KNN usando todos os arquivos de teste (usa muita RAM).
-def test_with_all_trainings(csv_name, test_name_list, training_name_list):
+def test_with_all_trainings(csv_name, csv_dir, test_name_list, training_name_list):
     training_set = list()
     for training_name in training_name_list:
-        training_set.append(create_list_csv(training_name))
+        training_set.append(create_list_csv(os.path.join(csv_dir, training_name)))
     for test_name in test_name_list:
-        test = create_list_csv(test_name)
+        test = create_list_csv(os.path.join(csv_dir, test_name))
         con_mtx = make_test(test, training_set)
         write_test_info_csv(csv_name, test_name, 'All trainings', con_mtx)
 
@@ -118,8 +118,10 @@ def run_tests_KNN():
 
     for test_name in test_name_list:
         for training_name in training_name_list:
-            con_mtx = KNN_test_combination(test_name, training_name)
+            con_mtx = KNN_test_combination(os.path.join(csv_dir_name, test_name), os.path.join(csv_dir_name, training_name))
             write_test_info_csv(csv_name, test_name, training_name, con_mtx)
+
+    test_with_all_trainings(csv_name, csv_dir_name, test_name_list, training_name_list)
 
 
 if __name__ == '__main__':
