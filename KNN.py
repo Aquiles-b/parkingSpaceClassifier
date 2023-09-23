@@ -93,7 +93,7 @@ def KNN_test_combination(test_name, training_name):
 def test_with_all_trainings(csv_name, csv_dir, test_name_list, training_name_list):
     training_set = list()
     for training_name in training_name_list:
-        training_set.append(create_list_csv(os.path.join(csv_dir, training_name)))
+        training_set += create_list_csv(os.path.join(csv_dir, training_name))
     for test_name in test_name_list:
         test = create_list_csv(os.path.join(csv_dir, test_name))
         con_mtx = make_test(test, training_set)
