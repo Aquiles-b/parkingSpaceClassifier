@@ -118,10 +118,11 @@ def run_tests_KNN():
 
     for test_name in test_name_list:
         for training_name in training_name_list:
-            con_mtx = KNN_test_combination(os.path.join(csv_dir_name, test_name), os.path.join(csv_dir_name,training_name))
+            con_mtx = KNN_test_combination(os.path.join(csv_dir_name, test_name), os.path.join(csv_dir_name, training_name))
             write_test_info_csv(csv_name, test_name, training_name, con_mtx)
 
-    test_with_all_trainings(csv_name, test_name_list, training_name_list)
+    test_with_all_trainings(csv_name, csv_dir_name, test_name_list, training_name_list)
+
 
 if __name__ == '__main__':
     run_tests_KNN()
