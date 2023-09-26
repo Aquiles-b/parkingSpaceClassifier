@@ -1,5 +1,5 @@
 # parkingSpaceClassifier  
-Esse projeto tem o objetivo de classificar vagas de estacionamento como ocupadas ou vazias. Foi usado como database a (Parking Lot Database)[https://web.inf.ufpr.br/vri/databases/parking-lot-database/], 
+Esse projeto tem o objetivo de classificar vagas de estacionamento como ocupadas ou vazias. Foi usado como database a [Parking Lot Database](https://web.inf.ufpr.br/vri/databases/parking-lot-database/), 
 o programa é dividido em 3 etapas que giram em torno da estrutura dessa database.
 ## make_sets_PKLot.py:
   - Esse script percorre o diretório PKLot (ou PKLot/PKLot dependendo de como a database está no diretório do programa) recortando todas as vagas com base no XML que acompanha cada imagem, nesse processo é usado o script crop_parking_space.py.
