@@ -45,5 +45,3 @@ precision_alt = list()
 for line in results[-3:]:
     parkings.append(line[0])
     precision_alt.append(line[2])
-
-show_bars(results[-1][1], 'Parkings', y_ticks)
