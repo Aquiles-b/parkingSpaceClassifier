@@ -17,4 +17,8 @@ o programa é dividido em 3 etapas que giram em torno da estrutura dessa databas
 
 ## Resultados:
 
-<img src="https://github.com/Aquiles-b/parkingSpaceClassifier/assets/112133986/57d5cd3e-c95c-41c3-932e-410b06f5bdb1" alt="drawing" width="2000"/>
+<img src="https://github.com/Aquiles-b/parkingSpaceClassifier/assets/112133986/7feca254-b4c2-4ca1-9da7-bd11a6b5510d" alt="resultado pucpr" width="500"/>    
+
+<img src="https://github.com/Aquiles-b/parkingSpaceClassifier/assets/112133986/b198db9f-8c0c-4a85-a0ca-19701fb5831c" alt="resultado ufpr05" width="500"/>   
+
+<img src="https://github.com/Aquiles-b/parkingSpaceClassifier/assets/112133986/b85e6a6a-87be-42d2-9884-a972375cf632" alt="resultado ufpr04" width="500"/>   
