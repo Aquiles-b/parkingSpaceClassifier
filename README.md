@@ -14,3 +14,7 @@ o programa é dividido em 3 etapas que giram em torno da estrutura dessa databas
   - Faz o arranjo de testes entre os arquivos de testes e treinos gerados no LBP.py. Usa a técnica do K-Nearest Neighbors, ela é aplicada no momento em que é apresentado um vetor de característica vindo de algum arquivo de teste e o script
     busca os 3 vetores de características mais próximos em distância euclidiana no arquivo de treino que está sendo usado no teste atual, com isso é feito um melhor de 3 para classificar a vaga. No final, é gerado uma planinha que mostra para cada teste a
     precisão do programa, overall error rate, positivos verdadeiros (TP), negativos verdadeiros (TN), positivos falsos (FP) e negativos falsos (FN).
+
+## Resultados:
+
+<img src="https://github.com/Aquiles-b/parkingSpaceClassifier/assets/112133986/57d5cd3e-c95c-41c3-932e-410b06f5bdb1" alt="drawing" width="1000"/>
